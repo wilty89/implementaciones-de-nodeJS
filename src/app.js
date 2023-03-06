@@ -22,7 +22,7 @@ const hello = require("./routes/hello.routes");
 const users = require("./routes/users.routes");
 const books = require("./routes/books.routes");
 const items = require("./routes/items.routes");
-const mongo = require("./routes/userrs");
+//const mongo = require("./routes/userrs");
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +33,7 @@ app.use(hello);
 app.use(users);
 app.use(books);
 app.use(items);
-app.use(mongo);
+//app.use(mongo);
 app.use(helmet()); // Ayuda a proteger aplicaciones Express
 
 const rateLimit = require("express-rate-limit");
