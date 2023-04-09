@@ -3,7 +3,7 @@ const cors = require("cors");
 const fs = require("fs");
 const morgan = require("morgan");
 const compression = require("compression");
-const { check } = require('express-validator');
+const { check } = require("express-validator");
 
 const helmet = require("helmet");
 
@@ -22,7 +22,6 @@ const hello = require("./routes/hello.routes");
 const users = require("./routes/users.routes");
 const books = require("./routes/books.routes");
 const items = require("./routes/items.routes");
-//const mongo = require("./routes/userrs");
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -61,7 +60,7 @@ app.use(
 const routerApi = require("./socket/crud");
 const Sockets = require("./socket/socket");
 Sockets(io);
-routerApi (app)
+routerApi(app);
 
 everyMinute();
 
@@ -77,8 +76,36 @@ app.get("/elements", (req, res) => {
   res.render("elements", {
     nombre: "Fernando Herrera",
     titulo: "Curso de Node",
+    estado: true,
   });
 });
+
+app.get("/equipo", (req, res) => {
+  res.render('equipo', {
+      equipo: [
+          {
+              id: 1,
+              nombre: 'Juanito',
+              habilidad: ['Javascript', 'Node.js'],
+              
+          },
+          {
+              id: 2,
+              nombre: 'Pedrito',
+              habilidad: ['Php', 'Laravel'],
+          }
+      ]
+  })
+});
+
+app.use((req, res, next) => {
+  res.status(404).render("404", {
+      titulo: "404",
+      descripcion: "Página no encontrada"
+  })
+})
+
+
 /*
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/public/404.html");
@@ -89,19 +116,24 @@ app.get("**", (req, res) => {
 });
 */
 
-app.post('/form', [
-check("name").isLength({min: 3 }).withMessage('must be at least 5 chars long'),
-check('email').isEmail(), 
-check ('age' ).isNumeric(),
-check("pass", "Please add pass").not().isEmpty()
-], (req, res) => {
-
-const name= req.body.name
-const email = req.body.email
-const age=req.body.age
-const pass=req.body.pass
-console.log(name, email, age)
-})
+app.post(
+  "/form",
+  [
+    check("name")
+      .isLength({ min: 3 })
+      .withMessage("must be at least 5 chars long"),
+    check("email").isEmail(),
+    check("age").isNumeric(),
+    check("pass", "Please add pass").not().isEmpty(),
+  ],
+  (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const age = req.body.age;
+    const pass = req.body.pass;
+    console.log(name, email, age);
+  }
+);
 
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "/logs/logs.txt"),
